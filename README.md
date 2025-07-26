@@ -1,2 +1,2 @@
 # legitReceiptReader
-this one is fr
+This is the fr one
