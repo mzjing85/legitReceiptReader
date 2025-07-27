@@ -105,7 +105,9 @@ export default function ScanScreen() {
         });
       }
       
+      console.log('setOcrText Called, sendToBackend next')
       setOcrText(extractedText);
+      sendToBackend(extractedText);
     } catch (error) {
       console.error('Error analyzing image:', error);
       setOcrText('Error analyzing image');
@@ -113,6 +115,23 @@ export default function ScanScreen() {
       setLoading(false);
     }
   };
+
+  const sendToBackend = async (ocrText: string) => {
+  try {
+    console.log('Sending OCR text to backend:', ocrText);
+    const response = await fetch('http://localhost:5000/parse-ocr', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ocrText }),
+    });
+    const parsedData = await response.json();
+    console.log('Parsed Data:', parsedData);
+  } catch (error) {
+    console.error('Error sending to backend:', error);
+  }
+};
 
   return (
     <SafeAreaView style={styles.safeArea}>
