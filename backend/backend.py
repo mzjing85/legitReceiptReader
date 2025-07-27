@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
+# Enable CORS for the parse-ocr endpoint
+CORS(app, resources={r"/parse-ocr": {"origins": "*"}}, supports_credentials=True)
 
 @app.route('/parse-ocr', methods=['POST'])
 def parse_ocr():
@@ -13,4 +14,5 @@ def parse_ocr():
     return jsonify(parsed_data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Bind to all interfaces so web client can reach this server
+    app.run(debug=True, host='0.0.0.0', port=5001)

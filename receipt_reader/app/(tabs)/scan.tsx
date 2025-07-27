@@ -119,7 +119,7 @@ export default function ScanScreen() {
   const sendToBackend = async (ocrText: string) => {
   try {
     console.log('Sending OCR text to backend:', ocrText);
-    const response = await fetch('http://localhost:5000/parse-ocr', {
+    const response = await fetch('http://localhost:5001/parse-ocr', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
