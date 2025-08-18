@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
-export default function Login() {
+export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -11,33 +11,33 @@ export default function Login() {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-  setLoading(true);
-  setMessage(null);
+    setLoading(true);
+    setMessage(null);
 
-  try {
-    const res = await fetch("http://54.198.139.245:3000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const res = await fetch("http://54.198.139.245:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const text = await res.text(); // <-- use text() instead of json()
+      const text = await res.text(); // <-- use text() instead of json()
 
-    if (!res.ok) {
-      setMessage(text || "Login failed");
+      if (!res.ok) {
+        setMessage(text || "Login failed");
+        setLoading(false);
+        return;
+      }
+
+      // Save token (or dummy token)
+      login("dummy-token");
+      setMessage(text); // this will show "Login successful!"
+    } catch (err: any) {
+      setMessage(err?.message || "Network error");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Save token (or dummy token)
-    login("dummy-token");
-    setMessage(text); // this will show "Login successful!"
-  } catch (err: any) {
-    setMessage(err?.message || "Network error");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -68,4 +68,15 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "white" },
   input: { borderWidth: 1, borderColor: "#ccc", padding: 10, marginBottom: 15, borderRadius: 5 },
   message: { marginTop: 15, textAlign: "center", color: "red" },
+  card: {
+    boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
+    elevation: 5, // Keep elevation for Android
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 15,
+    borderRadius: 8,
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    elevation: 3, // for Android
+  },
 });

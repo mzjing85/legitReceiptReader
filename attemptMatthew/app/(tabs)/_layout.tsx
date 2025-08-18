@@ -2,10 +2,15 @@ import { Tabs } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
+import { useEffect } from 'react';
 
 export default function TabLayout() {
   const { isLoggedIn } = useAuth();
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    console.log('TabLayout: isLoggedIn changed to:', isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
     <Tabs
@@ -14,55 +19,34 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      {isLoggedIn ? (
-        <>
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: 'Home',
-              tabBarIcon: ({ color }) => (
-                // Use your icon component here
-                // Example: <Ionicons name="home" size={24} color={color} />
-                null
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="scan"
-            options={{
-              title: 'Scan',
-              tabBarIcon: ({ color }) => (
-                // Use your icon component here
-                // Example: <Ionicons name="camera" size={24} color={color} />
-                null
-              ),
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <Tabs.Screen
-            name="login"
-            options={{
-              title: 'Login',
-              tabBarIcon: ({ color }) => (
-                // Use your icon component here
-                null
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="signup"
-            options={{
-              title: 'Sign Up',
-              tabBarIcon: ({ color }) => (
-                // Use your icon component here
-                null
-              ),
-            }}
-          />
-        </>
-      )}
+      <Tabs.Screen 
+        name="index" 
+        options={{
+          title: 'Home',
+          href: isLoggedIn ? "/" : null,
+        }}
+      />
+      <Tabs.Screen 
+        name="scan" 
+        options={{
+          title: 'Scan',
+          href: isLoggedIn ? "/scan" : null,
+        }}
+      />
+      <Tabs.Screen 
+        name="login" 
+        options={{
+          title: 'Login',
+          href: !isLoggedIn ? "/login" : null,
+        }}
+      />
+      <Tabs.Screen 
+        name="signup" 
+        options={{
+          title: 'Sign Up',
+          href: !isLoggedIn ? "/signup" : null,
+        }}
+      />
     </Tabs>
   );
 }
